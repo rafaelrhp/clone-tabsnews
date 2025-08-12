@@ -54,7 +54,7 @@ describe("GET /api/v1/users/[username]", () => {
         },
         body: JSON.stringify({
           username: "CaseDiferente",
-          email: "case.diferente@curso.dev",
+          email: "case.diferente@rafaelrhp.com",
           password: "senha123",
         }),
       });
