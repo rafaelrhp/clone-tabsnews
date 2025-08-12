@@ -17,7 +17,7 @@ describe("GET /api/v1/users/[username]", () => {
         },
         body: JSON.stringify({
           username: "MesmoCase",
-          email: "mesmo.case@rafaelrhp.com",
+          email: "mesmo.case@curso.dev",
           password: "senha123",
         }),
       });
@@ -35,7 +35,7 @@ describe("GET /api/v1/users/[username]", () => {
       expect(response2Body).toEqual({
         id: response2Body.id,
         username: "MesmoCase",
-        email: "mesmo.case@rafaelrhp.com",
+        email: "mesmo.case@curso.dev",
         password: "senha123",
         created_at: response2Body.created_at,
         updated_at: response2Body.updated_at,
@@ -54,7 +54,7 @@ describe("GET /api/v1/users/[username]", () => {
         },
         body: JSON.stringify({
           username: "CaseDiferente",
-          email: "case.diferente@rafaelrhp.com",
+          email: "case.diferente@curso.dev",
           password: "senha123",
         }),
       });
@@ -83,9 +83,9 @@ describe("GET /api/v1/users/[username]", () => {
       expect(Date.parse(response2Body.updated_at)).not.toBeNaN();
     });
 
-    test("With noneexistent username", async () => {
+    test("With nonexistent username", async () => {
       const response = await fetch(
-        "http://localhost:3000/api/v1/users/UsuarioNaoExiste",
+        "http://localhost:3000/api/v1/users/UsuarioInexistente",
       );
 
       expect(response.status).toBe(404);
@@ -95,7 +95,7 @@ describe("GET /api/v1/users/[username]", () => {
       expect(responseBody).toEqual({
         name: "NotFoundError",
         message: "O username informado não foi encontrado no sistema.",
-        action: "Verfique se o username está digitado corretamente",
+        action: "Verifique se o username está digitado corretamente.",
         status_code: 404,
       });
     });

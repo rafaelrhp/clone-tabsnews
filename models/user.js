@@ -9,22 +9,22 @@ async function findOneByUsername(username) {
   async function runSelectQuery(username) {
     const results = await database.query({
       text: `
-      SELECT 
-        *
-      FROM
-        users
-      WHERE
-        LOWER(username) = LOWER($1)
-      LIMIT
-        1
-      ;`,
+        SELECT
+          *
+        FROM
+          users
+        WHERE
+          LOWER(username) = LOWER($1)
+        LIMIT
+          1
+        ;`,
       values: [username],
     });
 
     if (results.rowCount === 0) {
       throw new NotFoundError({
         message: "O username informado não foi encontrado no sistema.",
-        action: "Verfique se o username está digitado corretamente",
+        action: "Verifique se o username está digitado corretamente.",
       });
     }
 
@@ -33,43 +33,22 @@ async function findOneByUsername(username) {
 }
 
 async function create(userInputValues) {
-  await validateUniqueUsername(userInputValues.username);
   await validateUniqueEmail(userInputValues.email);
+  await validateUniqueUsername(userInputValues.username);
 
   const newUser = await runInsertQuery(userInputValues);
   return newUser;
 
-  async function validateUniqueUsername(username) {
-    const results = await database.query({
-      text: `
-      SELECT 
-        username
-      FROM
-        users
-      WHERE
-        LOWER(username) = LOWER($1)
-      ;`,
-      values: [username],
-    });
-
-    if (results.rowCount > 0) {
-      throw new ValidationError({
-        message: "O usuário informado já está sendo utilizado.",
-        action: "Utilize outro usuário para realizar o cadastro.",
-      });
-    }
-  }
-
   async function validateUniqueEmail(email) {
     const results = await database.query({
       text: `
-      SELECT 
-        email
-      FROM
-        users
-      WHERE
-        LOWER(email) = LOWER($1)
-      ;`,
+        SELECT 
+          email 
+        FROM 
+          users
+        WHERE
+          LOWER(email) = LOWER($1)
+        ;`,
       values: [email],
     });
 
@@ -77,6 +56,27 @@ async function create(userInputValues) {
       throw new ValidationError({
         message: "O email informado já está sendo utilizado.",
         action: "Utilize outro email para realizar o cadastro.",
+      });
+    }
+  }
+
+  async function validateUniqueUsername(username) {
+    const results = await database.query({
+      text: `
+        SELECT
+          username
+        FROM
+          users
+        WHERE
+          LOWER(username) = LOWER($1)
+        ;`,
+      values: [username],
+    });
+
+    if (results.rowCount > 0) {
+      throw new ValidationError({
+        message: "O username informado já está sendo utilizado.",
+        action: "Utilize outro username para realizar o cadastro.",
       });
     }
   }
@@ -97,7 +97,6 @@ async function create(userInputValues) {
         userInputValues.password,
       ],
     });
-
     return results.rows[0];
   }
 }
